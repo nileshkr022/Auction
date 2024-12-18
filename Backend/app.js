@@ -32,4 +32,11 @@ app.use('/api/v1/user', userRouter);
 connection();
 app.use(errorMiddleware)
 
+
+
+app.get('/', (req, res) => {
+    res.send('Server is running');
+});
+
+
 export default app;

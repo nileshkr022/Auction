@@ -10,14 +10,14 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        selected:false,
+        select:false,
         minlength: [8,"password must contain atleast 8 characters"],
         maxlength: [32, "password cannot exceed 32 characters"],
     },
     email:String,
     address:String,
     phone:{
-        type:Number,
+        type:String,
         minlength: [10,"phone number must contain atleast 10 digits"],
         maxlength: [10, "phone number must contain atleast 10 digits"],
     },
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
             bankName:String,
         },
         upi:{
-            upiNumber:Number,
+            upiNumber:String,
         },
         paypal:{
             payPalemail:String,
@@ -66,5 +66,22 @@ const userSchema = new mongoose.Schema({
         default:Date.now,
     },
 });
+
+userSchema.pre("save",async function(next){
+    if(!this.isModified("password")){
+        next()
+    }
+    this.password = await bcrypt.hash(this.password,10);
+})
+
+userSchema.methods.comparePassword = async function(enteredPassword){
+    return await bcrypy.compare(enteredPassword,this.password);
+};
+
+userSchema.methods.generateJsonWebToken = function(){
+    return jwt.sign({id:this._id}, process.env.JWT_SECRET_KEY,{
+        expiresIn: process.env.JWT_EXPIRE,
+    });
+}
 
 export const User = mongoose.model("User",userSchema);
