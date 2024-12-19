@@ -3,6 +3,7 @@ import {Auction} from "../models/auctionSchema.js"
 import {catchAsyncErrors} from "../middlewares/catchasyncerrors.js"
 import errorHandler from "../middlewares/error.js"
 import {v2 as cloudinary} from "cloudinary"
+import mongoose from "mongoose"
 
 export const addNewAuctionItem = catchAsyncErrors(async(req,res,next) => {
     if (!req.files || Object.keys(req.files).length === 0) {
@@ -96,4 +97,37 @@ export const addNewAuctionItem = catchAsyncErrors(async(req,res,next) => {
         return next(new errorHandler(error.message||"failed to create auction",500));
     }
     
+});
+
+export const getAllItems = catchAsyncErrors(async(req,res,next)=>{
+    let items = await Auction.find();
+    res.status(200).json({
+        success:true,
+        items,
+    });
+});
+export const getMyAuctionItems = catchAsyncErrors(async(req,res,next)=>{
+    
+});
+export const getAuctionDetails = catchAsyncErrors(async(req,res,next)=>{
+    const {id} = req.params;
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return next(new errorHandler("Invalid ID format",400));
+    }
+    const auctionItem = await Auction.findById(id);
+    if(!auctionItem){
+        return next(new errorHandler("Auction not found",404));
+    }
+    const bidders = auctionItem.bids.sort((a,b)=>b.bid-a.bid);
+    res.status(200).json({
+        success:true,
+        auctionItem,
+        bidders,
+    });
+});
+export const removeFromAuction = catchAsyncErrors(async(req,res,next)=>{
+
+});
+export const rePublishItem = catchAsyncErrors(async(req,res,next)=>{
+
 });
