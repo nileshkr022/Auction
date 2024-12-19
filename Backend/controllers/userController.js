@@ -97,3 +97,41 @@ export const register = catchAsyncErrors(async (req, res, next) => {
     // Send a success response
     generateToken(user,"user registered.",201,res);
 });
+
+export const login = catchAsyncErrors(async(req,res,next) => {
+    const {email,password} = req.body;
+    if(!email || !password){
+        return next (new errorHandler("Please fill full form."));
+    }
+    const user = await User.findOne({email}).select("+password");
+    if(!user){
+        return next(new errorHandler("Invalid Credentials."));
+    }
+    const isPasswordmatched = await user.comparePassword(password);
+    if(!isPasswordmatched){
+        return next(new errorHandler("Invalid credentials.",400));
+    }
+    generateToken(user,"Login Successful.",200,res);
+});
+
+export const getProfile = catchAsyncErrors(async(req,res,next) => {
+    const user = req.user;
+    res.status(200).json({
+        success:true,
+        user,
+    });
+});
+
+export const logout = catchAsyncErrors(async(req,res,next) => {
+    res.status(200).cookie("token","",{
+        expires:new Date(Date.now()),
+        httpOnly: true,
+    }).json({
+        success:true,
+        message:"Logout Successful.",
+    })
+});
+
+export const fetchLeaderBoard = catchAsyncErrors(async(req,res,next) => {
+
+});
