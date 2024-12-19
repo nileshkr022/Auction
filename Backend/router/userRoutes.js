@@ -12,6 +12,6 @@ router.get('/me',isAuthenticated,getProfile);
 
 router.get('/logout',isAuthenticated,logout);
 
-router.get('leaderboard',fetchLeaderBoard);
+router.get('/leaderboard',fetchLeaderBoard);
 
 export default router;
