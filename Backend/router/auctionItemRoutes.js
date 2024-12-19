@@ -1,4 +1,4 @@
-import { addNewAuctionItem, getAllItems, getAuctionDetails, removeFromAuction, rePublishItem } from "../controllers/auctionItemController.js";
+import { addNewAuctionItem, getAllItems, getMyAuctionItems,getAuctionDetails, removeFromAuction, rePublishItem } from "../controllers/auctionItemController.js";
 import {isAuthenticated, isAuthorized} from "../middlewares/auth.js"
 import express from "express";
 
@@ -6,6 +6,8 @@ const router = express.Router();
 router.post('/create',isAuthenticated,isAuthorized("Auctioneer"),addNewAuctionItem);
 
 router.get('/allitems',getAllItems);
+
+router.get('/myitems',isAuthenticated,isAuthorized("Auctioneer"),getMyAuctionItems);
 
 router.get('/auction/:id',isAuthenticated,getAuctionDetails);
 
