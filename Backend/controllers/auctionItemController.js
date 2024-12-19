@@ -57,7 +57,7 @@ export const addNewAuctionItem = catchAsyncErrors(async(req,res,next) => {
     });
     //console.log(alreadyOneAuctionActive);
     if(alreadyOneAuctionActive.length>0){
-        return next(new errorHandler("Wait for your running auction to finish."));
+        return next(new errorHandler("Wait for your running auction to finish.",400));
     }
 
     try {
