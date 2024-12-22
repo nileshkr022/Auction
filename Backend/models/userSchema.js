@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        select:false,
+        selected:false,
         minlength: [8,"password must contain atleast 8 characters"],
         maxlength: [32, "password cannot exceed 32 characters"],
     },
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
         url:{
             type:String,
             required:true,
-        }
+        },
     },
     paymentMethods:{
         bankTransfer:{

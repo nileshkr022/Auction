@@ -3,21 +3,17 @@ const auctionSchema = new mongoose.Schema({
     title:String,
     description:String,
     startingBid:Number,
-    currerntBid:{
-        type:Number,
-        default:0
-    },
-    startTime:{
-        type:String,
-    },
-    endTime:{
-        type:String,
-    },
+    category:String,
     condition:{
         type:String,
-        enum:["new","used"],
+        enum:["New","Used"],
     },
-    category:String,
+    currentBid:{
+        type:Number,
+        default:0,
+    },
+    startTime:String,
+    endTime:String,
     image:{
         public_id:{
             type:String,
@@ -39,11 +35,9 @@ const auctionSchema = new mongoose.Schema({
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"Bid",
             },
-            userName:{
-                type:String,
-                profileImage:String,
-                amount:Number,
-            },
+            userName:String,
+            profileImage:String,
+            amount:Number,  
         },
     ],
     highestBidder:{
